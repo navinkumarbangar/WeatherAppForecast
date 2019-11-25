@@ -6,4 +6,11 @@
     <string name="city_name_hint_text">Enter City Name</string>
     <string name="country_name_hint_text">Enter Country Name</string>
     <string name="get_current_weather_btn_text">Get Current Weather</string>
+
+    <string name="weather_forecast_text"> Weather Forecast</string>
+
+    <!-- Alert dialog text-->
+    <string name="alert_dialog_title">Information</string>
+    <string name="alert_dialog_message">Please Enter Valid City Name</string>
+    <string name="alert_dialog_positive_btn_text">Ok</string>
 </resources>

@@ -121,7 +121,7 @@ class WeatherActivity : AppCompatActivity() {
     private fun updateHourlyForeCast(weatherHoursList: List<String>, tempratureList: List<String>) {
         val barData = weatherViewModel.getBarGraphData(weatherHoursList, tempratureList)
         barChartForecast.data = barData
-        barChartForecast.setDescription(" Weather Forecast")
+        barChartForecast.setDescription(getString(R.string.weather_forecast_text))
         barChartForecast.animateY(500)
     }
 
@@ -142,9 +142,9 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun displayAlertDialog() {
         val builder = AlertDialog.Builder(this@WeatherActivity)
-        builder.setTitle("Information")
-        builder.setMessage("Please Enter Valid City Name")
-        builder.setPositiveButton("OK") { dialog, _ ->
+        builder.setTitle(getString(R.string.alert_dialog_title))
+        builder.setMessage(getString(R.string.alert_dialog_message))
+        builder.setPositiveButton(getString(R.string.alert_dialog_positive_btn_text)) { dialog, _ ->
             dialog.dismiss()
         }
 
