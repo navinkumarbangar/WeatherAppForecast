@@ -110,6 +110,8 @@ class WeatherActivity : AppCompatActivity() {
             if (isValidInput()) {
                 tvCurrentWeatherDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
+                weatherViewModel.cityName = etCityName.text.toString()
+                weatherViewModel.countryName = etCountryName.text.toString()
                 weatherViewModel.getHourlyWeatherForeCastDetail()
             } else {
                 displayAlertDialog()
@@ -131,6 +133,8 @@ class WeatherActivity : AppCompatActivity() {
             if (isValidInput()) {
                 tvCurrentWeatherDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
+                weatherViewModel.cityName = etCityName.text.toString()
+                weatherViewModel.countryName = etCountryName.text.toString()
                 weatherViewModel.getSixteenDaysForeCastWeatherDetails()
             } else {
                 displayAlertDialog()
