@@ -28,9 +28,10 @@
                 <EditText
                     android:id="@+id/etCityName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_margin="@dimen/padding_margin_16"
                     android:hint="@string/city_name_hint_text"
+                    android:background="@drawable/bg_edit_text"
                     android:inputType="text"
                     android:padding="@dimen/padding_margin_4"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +40,8 @@
                 <EditText
                     android:id="@+id/etCountryName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_edit_text"
                     android:layout_margin="@dimen/padding_margin_16"
                     android:hint="@string/country_name_hint_text"
                     android:inputType="text"
