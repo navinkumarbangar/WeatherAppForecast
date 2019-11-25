@@ -29,7 +29,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
     var countryName: String = ""
 
     fun getCurrentWeatherDetails(): MutableLiveData<WeatherCurrentDetail?> {
-        return weatherRepo.getCurrentWeatherData(currentWeatherForecastDetailLiveData, cityName, countryName)
+        return weatherRepo.getCurrentWeatherData(currentWeatherForecastDetailLiveData, cityName, "countryName")
     }
 
     fun getCurrentWeatherLiveData(): MutableLiveData<WeatherCurrentDetail?> {
@@ -44,7 +44,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
     }
 
     fun getSixteenDaysForeCastWeatherDetails(): MutableLiveData<WeatherForeCast?> {
-        return weatherRepo.getSixteenDaysForecastData(sixteenDaysWeatherForecastDetailLiveData, cityName, countryName)
+        return weatherRepo.getSixteenDaysForecastData(sixteenDaysWeatherForecastDetailLiveData, cityName, "countryName")
     }
 
     fun getSixteenDaysForeCastWeatherLiveData(): MutableLiveData<WeatherForeCast?> {
@@ -113,8 +113,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
         }
         val barDataSet = BarDataSet(entries, " Weather Forecast")
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS)
-        val data = BarData(weatherHoursList, barDataSet)
-        return data
+        return BarData(weatherHoursList, barDataSet)
     }
 
     fun getCurrentWeatherDetailText(weatherDetailObj: WeatherCurrentDetail?): String {
