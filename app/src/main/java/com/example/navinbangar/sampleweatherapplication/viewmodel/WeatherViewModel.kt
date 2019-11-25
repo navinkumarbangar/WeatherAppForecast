@@ -3,6 +3,7 @@ package com.example.navinbangar.sampleweatherapplication.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.example.navinbangar.sampleweatherapplication.api.Repository
+import com.example.navinbangar.sampleweatherapplication.helper.Utils.convertKelvinToCelcius
 import com.example.navinbangar.sampleweatherapplication.model.*
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -87,7 +88,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
         val tempratureList = ArrayList<String>()
         weatherDetailList?.forEach {
             val weatherObjListObj = it.tempratureObj
-            tempratureList.add(convertFahrenheitToCelcius(weatherObjListObj.temp).toString())
+            tempratureList.add(convertKelvinToCelcius(weatherObjListObj.temp).toString())
         }
         return tempratureList.take(16)
     }
@@ -97,15 +98,12 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
         val tempratureList = ArrayList<String>()
         weatherDetailList?.forEach {
             val weatherObjListObj = it.main
-            tempratureList.add(convertFahrenheitToCelcius(weatherObjListObj.temp).toString())
+            tempratureList.add(convertKelvinToCelcius(weatherObjListObj.temp).toString())
         }
         return tempratureList.take(16)
     }
 
-    // Converts to celcius
-    fun convertFahrenheitToCelcius(fahrenheit: Double): Double {
-        return (fahrenheit - 32) * 5 / 9
-    }
+
 
     //create bar data object
     fun getBarGraphData(weatherHoursList: List<String>, tempratureList: List<String>): BarData {
@@ -125,13 +123,13 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
                 weatherDetailObj?.sys?.country +
                 "\n" +
                 "Temperature: " +
-                weatherDetailObj?.main?.temp +
+                weatherDetailObj?.main?.temp?.let { convertKelvinToCelcius(it) } + "°C" +
                 "\n" +
                 "Temperature(Min): " +
-                weatherDetailObj?.main?.tempMin +
+                weatherDetailObj?.main?.tempMin?.let { convertKelvinToCelcius(it) } + "°C" +
                 "\n" +
                 "Temperature(Max): " +
-                weatherDetailObj?.main?.tempMax +
+                weatherDetailObj?.main?.tempMax?.let { convertKelvinToCelcius(it) } + "°C" +
                 "\n" +
                 "Humidity: " +
                 weatherDetailObj?.main?.humidity +
