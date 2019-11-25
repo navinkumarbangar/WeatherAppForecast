@@ -56,7 +56,6 @@ class WeatherActivity : AppCompatActivity() {
                 tvCurrentWeatherDetails.visibility = View.VISIBLE
                 barChartForecast.visibility = View.GONE
                 weatherViewModel.cityName = etCityName.text.toString()
-                weatherViewModel.countryName = etCountryName.text.toString()
                 weatherViewModel.getCurrentWeatherDetails()
             } else {
                 displayAlertDialog()
@@ -111,7 +110,6 @@ class WeatherActivity : AppCompatActivity() {
                 tvCurrentWeatherDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
                 weatherViewModel.cityName = etCityName.text.toString()
-                weatherViewModel.countryName = etCountryName.text.toString()
                 weatherViewModel.getHourlyWeatherForeCastDetail()
             } else {
                 displayAlertDialog()
@@ -134,7 +132,6 @@ class WeatherActivity : AppCompatActivity() {
                 tvCurrentWeatherDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
                 weatherViewModel.cityName = etCityName.text.toString()
-                weatherViewModel.countryName = etCountryName.text.toString()
                 weatherViewModel.getSixteenDaysForeCastWeatherDetails()
             } else {
                 displayAlertDialog()
@@ -156,7 +153,7 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun isValidInput(): Boolean {
-        return etCityName.text.isNotEmpty() && etCountryName.text.isNotEmpty()
+        return etCityName.text.isNotEmpty()
     }
 
     private fun View.hideKeyboard() {
