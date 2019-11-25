@@ -143,7 +143,7 @@ class WeatherActivity : AppCompatActivity() {
     private fun displayAlertDialog() {
         val builder = AlertDialog.Builder(this@WeatherActivity)
         builder.setTitle("Information")
-        builder.setMessage("Please Enter Valid City Name and Country")
+        builder.setMessage("Please Enter Valid City Name")
         builder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
         }
