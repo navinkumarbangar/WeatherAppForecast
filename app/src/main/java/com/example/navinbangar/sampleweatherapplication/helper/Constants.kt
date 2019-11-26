@@ -6,8 +6,8 @@ package com.example.navinbangar.sampleweatherapplication.helper
 
 class Constants {
     companion object {
-        var weatherUrl = "https://api.openweathermap.org/"
-        var ForecastAppId = "035e3db0d584e4a925ca705e6ec9677e"
+        const val weatherUrl = "https://api.openweathermap.org/"
+        const val ForecastAppId = "035e3db0d584e4a925ca705e6ec9677e"
         const val success_code = 200
     }
 }
