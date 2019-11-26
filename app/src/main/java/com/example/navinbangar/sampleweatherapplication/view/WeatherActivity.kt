@@ -17,7 +17,10 @@ import com.example.navinbangar.sampleweatherapplication.viewmodel.WeatherViewMod
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-
+/**
+ * Created by Navin Bangar on 11/25/2019.
+ * This is activity class responsible for showing  weather details to user
+ */
 class WeatherActivity : AppCompatActivity() {
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
