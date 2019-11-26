@@ -18,15 +18,15 @@ import kotlin.collections.ArrayList
 
 /**
  * Created by Navin Bangar on 11/19/2019.
+ * This is view model class responsible for communicating with repository
+ * and updates UI
  */
 
 class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewModel() {
     private val hourlyWeatherForecastDetailLiveData = MutableLiveData<WeatherDetailHourly?>()
     private val currentWeatherForecastDetailLiveData = MutableLiveData<WeatherCurrentDetail?>()
     private val sixteenDaysWeatherForecastDetailLiveData = MutableLiveData<WeatherForeCast?>()
-
     var cityName: String = ""
-    var countryName: String = ""
 
     fun getCurrentWeatherDetails(): MutableLiveData<WeatherCurrentDetail?> {
         return weatherRepo.getCurrentWeatherData(currentWeatherForecastDetailLiveData, cityName)
@@ -103,8 +103,6 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
         return tempratureList.take(16)
     }
 
-
-
     //create bar data object
     fun getBarGraphData(weatherHoursList: List<String>, tempratureList: List<String>): BarData {
         val entries = ArrayList<BarEntry>()
@@ -117,8 +115,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
     }
 
     fun getCurrentWeatherDetailText(weatherDetailObj: WeatherCurrentDetail?): String {
-        val stringBuilder: String
-        stringBuilder = "Country: " +
+        return "Country: " +
                 weatherDetailObj?.sys?.country +
                 "\n" +
                 "Temperature: " +
@@ -135,8 +132,6 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
                 "\n" +
                 "Pressure: " +
                 weatherDetailObj?.main?.pressure
-
-        return stringBuilder
     }
 
 

@@ -3,6 +3,8 @@ package com.example.navinbangar.sampleweatherapplication.helper
 
 /**
  * Created by Navin Bangar on 11/25/2019.
+ * This class holds utility methods can be used throught app
+ *
  */
 
 object Utils {

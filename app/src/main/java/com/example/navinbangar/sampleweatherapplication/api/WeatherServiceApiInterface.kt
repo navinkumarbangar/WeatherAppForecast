@@ -9,6 +9,8 @@ import retrofit2.http.Query
 
 /**
  * Created by Navin Bangar on 11/19/2019.
+ * This is an api interface.Any class want to make request can implement its methods.
+ *
  */
 interface WeatherServiceApiInterface {
 

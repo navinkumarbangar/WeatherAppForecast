@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 
 /**
  * Created by Navin Bangar on 11/26/2019.
+ * This class responsible for providing views extension functions
  */
 
 fun View.makeVisible() {
