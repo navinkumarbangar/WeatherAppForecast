@@ -17,7 +17,6 @@ import retrofit2.Response
  */
 
 class Repository(private val webservice: WeatherServiceApiInterface) {
-
     ///Get current weather details
     fun getCurrentWeatherData(currentWeatherLiveData: MutableLiveData<WeatherCurrentDetail?>, cityName: String, countryName: String = "countryName"): MutableLiveData<WeatherCurrentDetail?> {
         val call = webservice.getCurrentWeatherData("$cityName,$countryName", ForecastAppId)
@@ -28,7 +27,6 @@ class Repository(private val webservice: WeatherServiceApiInterface) {
                     currentWeatherLiveData.postValue(weatherForecastObj)
                 }
             }
-
             override fun onFailure(call: Call<WeatherCurrentDetail>, t: Throwable) {
                 currentWeatherLiveData.postValue(null)
             }
