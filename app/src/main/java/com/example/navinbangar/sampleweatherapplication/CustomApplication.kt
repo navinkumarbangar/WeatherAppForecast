@@ -12,6 +12,7 @@ import javax.inject.Inject
 
 /**
  * Created by Navin Bangar on 11/19/2019.
+ * This is custom application class used in dagger implementation
  */
 
 
