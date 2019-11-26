@@ -29,14 +29,14 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
     var countryName: String = ""
 
     fun getCurrentWeatherDetails(): MutableLiveData<WeatherCurrentDetail?> {
-        return weatherRepo.getCurrentWeatherData(currentWeatherForecastDetailLiveData, cityName, "countryName")
+        return weatherRepo.getCurrentWeatherData(currentWeatherForecastDetailLiveData, cityName)
     }
 
     fun getCurrentWeatherLiveData(): MutableLiveData<WeatherCurrentDetail?> {
         return currentWeatherForecastDetailLiveData
     }
     fun getHourlyWeatherForeCastDetail(): MutableLiveData<WeatherDetailHourly?> {
-        return weatherRepo.getHourlyForecastData(hourlyWeatherForecastDetailLiveData)
+        return weatherRepo.getHourlyForecastData(hourlyWeatherForecastDetailLiveData, cityName)
     }
 
     fun getHourlyWeatherForeCastLiveData(): MutableLiveData<WeatherDetailHourly?> {
@@ -44,7 +44,7 @@ class WeatherViewModel @Inject constructor(val weatherRepo: Repository) : ViewMo
     }
 
     fun getSixteenDaysForeCastWeatherDetails(): MutableLiveData<WeatherForeCast?> {
-        return weatherRepo.getSixteenDaysForecastData(sixteenDaysWeatherForecastDetailLiveData, cityName, "countryName")
+        return weatherRepo.getSixteenDaysForecastData(sixteenDaysWeatherForecastDetailLiveData, cityName)
     }
 
     fun getSixteenDaysForeCastWeatherLiveData(): MutableLiveData<WeatherForeCast?> {

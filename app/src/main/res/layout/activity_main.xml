@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/clShowWeatherButtons"
-            android:layout_margin="@dimen/padding_margin_8"
             app:layout_constraintTop_toTopOf="parent">
 
             <android.support.constraint.ConstraintLayout
@@ -38,22 +37,33 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvCurrentWeatherDetails"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvCurrentWeathreDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_margin_16"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/etCityName" />
+                    app:cardBackgroundColor="@color/sea_green_alt_color"
+                    app:cardCornerRadius="@dimen/padding_margin_4"
+                    app:cardElevation="@dimen/padding_margin_4"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintTop_toBottomOf="@+id/etCityName">
+
+                    <TextView
+                        android:id="@+id/tvCurrentWeatherDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/padding_margin_16"
+                        android:textColor="@color/colorWhite" />
+                </android.support.v7.widget.CardView>
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChartForecast"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/forecastChart_height_180"
-                    android:layout_marginBottom="@dimen/padding_margin_16"
-                    android:layout_marginEnd="@dimen/padding_margin_8"
-                    android:layout_marginStart="@dimen/padding_margin_8"
-                    android:layout_marginTop="@dimen/padding_margin_16"
+                    android:layout_margin="@dimen/padding_margin_16"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
