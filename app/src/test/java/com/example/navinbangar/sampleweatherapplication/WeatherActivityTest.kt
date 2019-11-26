@@ -2,12 +2,15 @@ package com.example.navinbangar.sampleweatherapplication
 
 import com.example.navinbangar.sampleweatherapplication.R.id.barChartForecast
 import com.example.navinbangar.sampleweatherapplication.R.id.cvCurrentWeathreDetails
+import com.example.navinbangar.sampleweatherapplication.di.factory.ViewModelFactory
+import com.example.navinbangar.sampleweatherapplication.view.WeatherActivity
 import org.hamcrest.core.IsNull.notNullValue
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 
@@ -17,6 +20,8 @@ import org.mockito.MockitoAnnotations
 
 @RunWith(JUnit4::class)
 class WeatherActivityTest {
+    private val viewModelFactory = mock(ViewModelFactory::class.java)
+    val weatherActivity = spy(WeatherActivity())
 
     @Before
     fun setUp() {
@@ -33,4 +38,16 @@ class WeatherActivityTest {
         assertThat(barChartForecast, notNullValue())
     }
 
+
+    @Test
+    @Throws(Exception::class)
+    fun testOnCreate() {
+        doNothing().`when`(weatherActivity).setContentView(R.layout.activity_main)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testButtonGetCurrentWeatherClickListeners() {
+        doNothing().`when`(weatherActivity).setContentView(R.layout.activity_main)
+    }
 }
