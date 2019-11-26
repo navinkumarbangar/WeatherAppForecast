@@ -2,16 +2,16 @@ package com.example.navinbangar.sampleweatherapplication.view
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.example.navinbangar.sampleweatherapplication.CustomApplication
 import com.example.navinbangar.sampleweatherapplication.R
 import com.example.navinbangar.sampleweatherapplication.di.factory.ViewModelFactory
-import com.example.navinbangar.sampleweatherapplication.helper.Utils
+import com.example.navinbangar.sampleweatherapplication.helper.hideKeyboard
+import com.example.navinbangar.sampleweatherapplication.helper.makeGone
+import com.example.navinbangar.sampleweatherapplication.helper.viewVisibleAnimator
 import com.example.navinbangar.sampleweatherapplication.model.WeatherCurrentDetail
 import com.example.navinbangar.sampleweatherapplication.viewmodel.WeatherViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,58 +41,6 @@ class WeatherActivity : AppCompatActivity() {
         subscribeSixteenDaysForeCastLiveData()
     }
 
-
-
-    private fun subscribeCurrentWeatherLiveData() {
-        weatherViewModel.getCurrentWeatherLiveData().observe(this, Observer { weatherDetailObj ->
-            updateCurrentWeatherDetail(weatherDetailObj)
-        })
-    }
-
-    private fun setUpGetCurrentWeatherBtnClickListener() {
-        btnGetCurrentWeather.setOnClickListener {
-            if (isValidInput()) {
-                btnGetCurrentWeather.hideKeyboard()
-                Utils.viewVisibleAnimator(cvCurrentWeathreDetails)
-                barChartForecast.visibility = View.GONE
-
-                weatherViewModel.cityName = etCityName.text.toString()
-                weatherViewModel.getCurrentWeatherDetails()
-            } else {
-                displayAlertDialog()
-            }
-        }
-    }
-
-    private fun updateCurrentWeatherDetail(weatherDetailObj: WeatherCurrentDetail?) {
-        val currentWeatherDetails = weatherViewModel.getCurrentWeatherDetailText(weatherDetailObj)
-        tvCurrentWeatherDetails.text = currentWeatherDetails
-    }
-
-
-
-    private fun setUpCloseBtnClickListener() {
-        btnCloseApp.setOnClickListener {
-            finishAffinity()
-        }
-    }
-
-    private fun subscribeHourlyForeCastLiveData() {
-        weatherViewModel.getHourlyWeatherForeCastLiveData().observe(this, Observer { weatherDetailHourlyObj ->
-            val weatherHoursList = weatherViewModel.getHourlyForeCastHours(weatherDetailHourlyObj?.list)
-            val temperatureList = weatherViewModel.getHourlyForeCastTemprature(weatherDetailHourlyObj?.list)
-            updateHourlyForeCast(weatherHoursList, temperatureList)
-        })
-    }
-
-    private fun subscribeSixteenDaysForeCastLiveData() {
-        weatherViewModel.getSixteenDaysForeCastWeatherLiveData().observe(this, Observer { weatherDetailHourlyObj ->
-            val weatherHoursList = weatherViewModel.getSixteenDaysForeCastHours(weatherDetailHourlyObj?.list)
-            val temperatureList = weatherViewModel.getSixteenDaysForeCastTemprature(weatherDetailHourlyObj?.list)
-            updateHourlyForeCast(weatherHoursList, temperatureList)
-        })
-    }
-
     private fun setUpDagger() {
         (application as CustomApplication).getNetworkComponentFn().inject(this)
     }
@@ -102,9 +50,59 @@ class WeatherActivity : AppCompatActivity() {
     }
 
 
+    private fun setUpGetCurrentWeatherBtnClickListener() {
+        btnGetCurrentWeather.setOnClickListener {
+            if (isValidInput()) {
+                btnGetCurrentWeather.hideKeyboard(btnGetCurrentWeather.context)
+                cvCurrentWeathreDetails.viewVisibleAnimator()
+                barChartForecast.makeGone()
+
+                weatherViewModel.cityName = etCityName.text.toString()
+                weatherViewModel.getCurrentWeatherDetails()
+            } else {
+                displayAlertDialog()
+            }
+        }
+    }
+
+    private fun subscribeCurrentWeatherLiveData() {
+        weatherViewModel.getCurrentWeatherLiveData().observe(this, Observer { weatherDetailObj ->
+            updateCurrentWeatherDetail(weatherDetailObj)
+        })
+    }
+
+    private fun updateCurrentWeatherDetail(weatherDetailObj: WeatherCurrentDetail?) {
+        val currentWeatherDetails = weatherViewModel.getCurrentWeatherDetailText(weatherDetailObj)
+        tvCurrentWeatherDetails.text = currentWeatherDetails
+    }
+
+    private fun setUpSixteenDaysForecastBtnListener() {
+        btnShowSixteenDaysForcast.setOnClickListener {
+            btnShowSixteenDaysForcast.hideKeyboard(btnShowSixteenDaysForcast.context)
+            if (isValidInput()) {
+                barChartForecast.viewVisibleAnimator()
+                cvCurrentWeathreDetails.makeGone()
+
+                weatherViewModel.cityName = etCityName.text.toString()
+                weatherViewModel.getSixteenDaysForeCastWeatherDetails()
+            } else {
+                displayAlertDialog()
+            }
+
+        }
+    }
+
+    private fun subscribeSixteenDaysForeCastLiveData() {
+        weatherViewModel.getSixteenDaysForeCastWeatherLiveData().observe(this, Observer { weatherDetailHourlyObj ->
+            val weatherHoursList = weatherViewModel.getSixteenDaysForeCastHours(weatherDetailHourlyObj?.list)
+            val temperatureList = weatherViewModel.getSixteenDaysForeCastTemprature(weatherDetailHourlyObj?.list)
+            updateWeatherForeCastDetails(weatherHoursList, temperatureList)
+        })
+    }
+
     private fun setUpHourlyForecastBtnListener() {
         btnShowHourlyForcast.setOnClickListener {
-            btnShowHourlyForcast.hideKeyboard()
+            btnShowHourlyForcast.hideKeyboard(btnShowHourlyForcast.context)
             if (isValidInput()) {
                 cvCurrentWeathreDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
@@ -118,26 +116,25 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateHourlyForeCast(weatherHoursList: List<String>, tempratureList: List<String>) {
+    private fun subscribeHourlyForeCastLiveData() {
+        weatherViewModel.getHourlyWeatherForeCastLiveData().observe(this, Observer { weatherDetailHourlyObj ->
+            val weatherHoursList = weatherViewModel.getHourlyForeCastHours(weatherDetailHourlyObj?.list)
+            val temperatureList = weatherViewModel.getHourlyForeCastTemprature(weatherDetailHourlyObj?.list)
+            updateWeatherForeCastDetails(weatherHoursList, temperatureList)
+        })
+    }
+
+
+    private fun updateWeatherForeCastDetails(weatherHoursList: List<String>, tempratureList: List<String>) {
         val barData = weatherViewModel.getBarGraphData(weatherHoursList, tempratureList)
         barChartForecast.data = barData
         barChartForecast.setDescription(getString(R.string.weather_forecast_text))
         barChartForecast.animateY(500)
     }
 
-    private fun setUpSixteenDaysForecastBtnListener() {
-        btnShowSixteenDaysForcast.setOnClickListener {
-            btnShowSixteenDaysForcast.hideKeyboard()
-            if (isValidInput()) {
-                Utils.viewVisibleAnimator(barChartForecast)
-                cvCurrentWeathreDetails.visibility = View.GONE
-
-                weatherViewModel.cityName = etCityName.text.toString()
-                weatherViewModel.getSixteenDaysForeCastWeatherDetails()
-            } else {
-                displayAlertDialog()
-            }
-
+    private fun setUpCloseBtnClickListener() {
+        btnCloseApp.setOnClickListener {
+            finishAffinity()
         }
     }
 
@@ -155,10 +152,5 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun isValidInput(): Boolean {
         return etCityName.text.isNotEmpty()
-    }
-
-    private fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 }
