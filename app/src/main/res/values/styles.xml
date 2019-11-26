@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/sea_green_alt_color</item>
         <item name="colorPrimaryDark">@color/sea_green_alt_color</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorBlack</item>
     </style>
 
     <style name="button_style">
