@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import com.example.navinbangar.sampleweatherapplication.CustomApplication
 import com.example.navinbangar.sampleweatherapplication.R
 import com.example.navinbangar.sampleweatherapplication.di.factory.ViewModelFactory
+import com.example.navinbangar.sampleweatherapplication.helper.Utils
 import com.example.navinbangar.sampleweatherapplication.model.WeatherCurrentDetail
 import com.example.navinbangar.sampleweatherapplication.viewmodel.WeatherViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,28 +21,27 @@ import javax.inject.Inject
 class WeatherActivity : AppCompatActivity() {
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
-    protected lateinit var weatherViewModel: WeatherViewModel
+    private lateinit var weatherViewModel: WeatherViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUpDagger()
         setUpViewModel()
+
+        //Setting up button click listeners
         setUpGetCurrentWeatherBtnClickListener()
-        fetchHourlyForeCastDetail()
         setUpHourlyForecastBtnListener()
-        fetchSixteenDaysForeCastDetail()
         setUpSixteenDaysForecastBtnListener()
         setUpCloseBtnClickListener()
+
+        //subscribe live data for ui update if any change occure in data
         subscribeCurrentWeatherLiveData()
         subscribeHourlyForeCastLiveData()
         subscribeSixteenDaysForeCastLiveData()
-        setUpSixteenDaysForecastBtnListener()
     }
 
-    private fun fetchSixteenDaysForeCastDetail() {
-        weatherViewModel.getSixteenDaysForeCastWeatherDetails()
-    }
+
 
     private fun subscribeCurrentWeatherLiveData() {
         weatherViewModel.getCurrentWeatherLiveData().observe(this, Observer { weatherDetailObj ->
@@ -53,8 +53,9 @@ class WeatherActivity : AppCompatActivity() {
         btnGetCurrentWeather.setOnClickListener {
             if (isValidInput()) {
                 btnGetCurrentWeather.hideKeyboard()
-                tvCurrentWeatherDetails.visibility = View.VISIBLE
+                Utils.viewVisibleAnimator(cvCurrentWeathreDetails)
                 barChartForecast.visibility = View.GONE
+
                 weatherViewModel.cityName = etCityName.text.toString()
                 weatherViewModel.getCurrentWeatherDetails()
             } else {
@@ -68,9 +69,7 @@ class WeatherActivity : AppCompatActivity() {
         tvCurrentWeatherDetails.text = currentWeatherDetails
     }
 
-    private fun fetchHourlyForeCastDetail() {
-        weatherViewModel.getHourlyWeatherForeCastDetail()
-    }
+
 
     private fun setUpCloseBtnClickListener() {
         btnCloseApp.setOnClickListener {
@@ -81,16 +80,16 @@ class WeatherActivity : AppCompatActivity() {
     private fun subscribeHourlyForeCastLiveData() {
         weatherViewModel.getHourlyWeatherForeCastLiveData().observe(this, Observer { weatherDetailHourlyObj ->
             val weatherHoursList = weatherViewModel.getHourlyForeCastHours(weatherDetailHourlyObj?.list)
-            val tempratureList = weatherViewModel.getHourlyForeCastTemprature(weatherDetailHourlyObj?.list)
-            updateHourlyForeCast(weatherHoursList, tempratureList)
+            val temperatureList = weatherViewModel.getHourlyForeCastTemprature(weatherDetailHourlyObj?.list)
+            updateHourlyForeCast(weatherHoursList, temperatureList)
         })
     }
 
     private fun subscribeSixteenDaysForeCastLiveData() {
         weatherViewModel.getSixteenDaysForeCastWeatherLiveData().observe(this, Observer { weatherDetailHourlyObj ->
             val weatherHoursList = weatherViewModel.getSixteenDaysForeCastHours(weatherDetailHourlyObj?.list)
-            val tempratureList = weatherViewModel.getSixteenDaysForeCastTemprature(weatherDetailHourlyObj?.list)
-            updateHourlyForeCast(weatherHoursList, tempratureList)
+            val temperatureList = weatherViewModel.getSixteenDaysForeCastTemprature(weatherDetailHourlyObj?.list)
+            updateHourlyForeCast(weatherHoursList, temperatureList)
         })
     }
 
@@ -107,8 +106,9 @@ class WeatherActivity : AppCompatActivity() {
         btnShowHourlyForcast.setOnClickListener {
             btnShowHourlyForcast.hideKeyboard()
             if (isValidInput()) {
-                tvCurrentWeatherDetails.visibility = View.GONE
+                cvCurrentWeathreDetails.visibility = View.GONE
                 barChartForecast.visibility = View.VISIBLE
+
                 weatherViewModel.cityName = etCityName.text.toString()
                 weatherViewModel.getHourlyWeatherForeCastDetail()
             } else {
@@ -129,8 +129,9 @@ class WeatherActivity : AppCompatActivity() {
         btnShowSixteenDaysForcast.setOnClickListener {
             btnShowSixteenDaysForcast.hideKeyboard()
             if (isValidInput()) {
-                tvCurrentWeatherDetails.visibility = View.GONE
-                barChartForecast.visibility = View.VISIBLE
+                Utils.viewVisibleAnimator(barChartForecast)
+                cvCurrentWeathreDetails.visibility = View.GONE
+
                 weatherViewModel.cityName = etCityName.text.toString()
                 weatherViewModel.getSixteenDaysForeCastWeatherDetails()
             } else {

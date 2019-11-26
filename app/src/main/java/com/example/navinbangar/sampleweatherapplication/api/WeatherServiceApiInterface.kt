@@ -16,7 +16,7 @@ interface WeatherServiceApiInterface {
     fun getCurrentWeatherData(@Query("q") q: String, @Query("APPID") APPID: String): Call<WeatherCurrentDetail>
 
     @GET("data/2.5/forecast/hourly?")
-    fun getHourlyWeatherData(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") appid: String): Call<WeatherDetailHourly>
+    fun getHourlyWeatherData(@Query("q") q: String, @Query("appid") appid: String): Call<WeatherDetailHourly>
 
     @GET("data/2.5/forecast?")
     fun getSixteenDaysForecastData(@Query("q") q: String, @Query("APPID") appid: String

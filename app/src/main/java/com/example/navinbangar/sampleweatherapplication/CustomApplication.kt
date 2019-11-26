@@ -5,7 +5,7 @@ import android.app.Application
 import com.example.navinbangar.sampleweatherapplication.di.NetworksModule
 import com.example.navinbangar.sampleweatherapplication.di.component.DaggerNetworkComponent
 import com.example.navinbangar.sampleweatherapplication.di.component.NetworkComponent
-import com.example.navinbangar.sampleweatherapplication.helper.Helper
+import com.example.navinbangar.sampleweatherapplication.helper.Constants.Companion.weatherUrl
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 
 class CustomApplication : Application(), HasActivityInjector {
-    lateinit var networkComponent: NetworkComponent
+    private lateinit var networkComponent: NetworkComponent
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -28,7 +28,7 @@ class CustomApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         networkComponent = DaggerNetworkComponent.builder()
-                .networksModule(NetworksModule(Helper.weatherUrl))
+                .networksModule(NetworksModule(weatherUrl))
                 .build()
     }
 
