@@ -1,6 +1,7 @@
 package com.example.navinbangar.sampleweatherapplication.view
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -8,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.navinbangar.sampleweatherapplication.CustomApplication
 import com.example.navinbangar.sampleweatherapplication.R
-import com.example.navinbangar.sampleweatherapplication.di.factory.ViewModelFactory
 import com.example.navinbangar.sampleweatherapplication.helper.hideKeyboard
 import com.example.navinbangar.sampleweatherapplication.helper.makeGone
 import com.example.navinbangar.sampleweatherapplication.helper.viewVisibleAnimator
@@ -23,7 +23,7 @@ import javax.inject.Inject
  */
 class WeatherActivity : AppCompatActivity() {
     @Inject
-    internal lateinit var viewModelFactory: ViewModelFactory
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var weatherViewModel: WeatherViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

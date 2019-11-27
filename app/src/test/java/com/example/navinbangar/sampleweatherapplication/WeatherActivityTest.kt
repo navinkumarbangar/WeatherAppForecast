@@ -1,16 +1,22 @@
 package com.example.navinbangar.sampleweatherapplication
 
-import com.example.navinbangar.sampleweatherapplication.R.id.barChartForecast
-import com.example.navinbangar.sampleweatherapplication.R.id.cvCurrentWeathreDetails
-import com.example.navinbangar.sampleweatherapplication.di.factory.ViewModelFactory
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.widget.Button
+import android.widget.EditText
+import com.example.navinbangar.sampleweatherapplication.R.id.*
+import com.example.navinbangar.sampleweatherapplication.api.Repository
 import com.example.navinbangar.sampleweatherapplication.view.WeatherActivity
-import org.hamcrest.core.IsNull.notNullValue
-import org.junit.Assert.assertThat
+import com.example.navinbangar.sampleweatherapplication.viewmodel.WeatherViewModel
+import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.*
+import org.mockito.Mock
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.spy
 import org.mockito.MockitoAnnotations
 
 
@@ -20,34 +26,81 @@ import org.mockito.MockitoAnnotations
 
 @RunWith(JUnit4::class)
 class WeatherActivityTest {
-    private val viewModelFactory = mock(ViewModelFactory::class.java)
     val weatherActivity = spy(WeatherActivity())
+    private val repository = mock(Repository::class.java)
+    private val viewModelFactoryTest = mock(ViewModelProvider.Factory::class.java)
+
+    private var weatherViewModelTest = WeatherViewModel(repository)
+    @Mock
+    private val etCityName: EditText? = null
+    @Mock
+    private val btnGetCurrentWeather: Button? = null
+
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        weatherActivity.viewModelFactory = createViewModelFactory(weatherViewModelTest)
     }
 
     @Test
-    fun ensureCurrentWeatherDetailsCardViewIsPresent() {
-        assertThat(cvCurrentWeathreDetails, notNullValue())
+    fun testViewsAreNotNull() {
+        assertNotNull(etCityName)
+        assertNotNull(btnGetCurrentWeather)
+        assertNotNull(btnShowSixteenDaysForcast)
+        assertNotNull(barChartForecast)
+        assertNotNull(btnCloseApp)
+        assertNotNull(cvCurrentWeathreDetails)
+
     }
 
     @Test
-    fun ensureBarChartViewIsPresent() {
-        assertThat(barChartForecast, notNullValue())
+    fun testweatherViewModelTestNotNull() {
+        assertNotNull(viewModelFactoryTest)
     }
+
+
+    /*   @Test
+        fun createCityNameCannotBeBlank() {
+           onView(withId(R.id.etCityName)).check(matches(hasErrorText("Error Message")))
+       }
+
+       @Test
+       fun testHintVisibility() {
+           // check hint visibility
+         onView(withId(R.id.etCityName)).check(matches(withHint("Enter city Name")))
+           // enter name
+           onView(withId(R.id.etCityName)).perform(typeText("Rome"), closeSoftKeyboard())
+         onView(withId(R.id.etCityName)).check(matches(withText("Rome")))
+       }*/
+
+
 
 
     @Test
     @Throws(Exception::class)
-    fun testOnCreate() {
-        doNothing().`when`(weatherActivity).setContentView(R.layout.activity_main)
+    fun `testGetViewModelFactory$production_sources_for_module_app`() {
+        val result = weatherActivity.viewModelFactory
+        Assert.assertNotEquals(createViewModelFactory(weatherViewModelTest), result)
     }
 
     @Test
     @Throws(Exception::class)
-    fun testButtonGetCurrentWeatherClickListeners() {
-        doNothing().`when`(weatherActivity).setContentView(R.layout.activity_main)
+    fun `testSetViewModelFactory$production_sources_for_module_app`() {
+        weatherActivity.viewModelFactory = createViewModelFactory(weatherViewModelTest)
+        Assert.assertNotNull(createViewModelFactory(weatherViewModelTest))
     }
+
+    private fun <T : ViewModel> createViewModelFactory(viewModel: T): ViewModelProvider.Factory {
+        return object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(viewModelClass: Class<T>): T {
+                if (viewModelClass.isAssignableFrom(viewModel.javaClass)) {
+                    @Suppress("UNCHECKED_CAST")
+                    return viewModel as T
+                }
+                throw IllegalArgumentException("Unknown view model class " + viewModelClass)
+            }
+        }
+    }
+
 }
