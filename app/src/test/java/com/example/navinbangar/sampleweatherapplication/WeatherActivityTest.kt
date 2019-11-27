@@ -59,24 +59,6 @@ class WeatherActivityTest {
         assertNotNull(viewModelFactoryTest)
     }
 
-
-    /*   @Test
-        fun createCityNameCannotBeBlank() {
-           onView(withId(R.id.etCityName)).check(matches(hasErrorText("Error Message")))
-       }
-
-       @Test
-       fun testHintVisibility() {
-           // check hint visibility
-         onView(withId(R.id.etCityName)).check(matches(withHint("Enter city Name")))
-           // enter name
-           onView(withId(R.id.etCityName)).perform(typeText("Rome"), closeSoftKeyboard())
-         onView(withId(R.id.etCityName)).check(matches(withText("Rome")))
-       }*/
-
-
-
-
     @Test
     @Throws(Exception::class)
     fun `testGetViewModelFactory$production_sources_for_module_app`() {
@@ -98,7 +80,7 @@ class WeatherActivityTest {
                     @Suppress("UNCHECKED_CAST")
                     return viewModel as T
                 }
-                throw IllegalArgumentException("Unknown view model class " + viewModelClass)
+                throw IllegalArgumentException("Unknown view model class $viewModelClass")
             }
         }
     }

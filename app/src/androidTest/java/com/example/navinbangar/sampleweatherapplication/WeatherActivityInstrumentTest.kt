@@ -28,10 +28,16 @@ class WeatherActivityInstrumentTest {
         onView(withText("Rome")).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun getSixteenHoursWeatherDetails() {
+        onView(withId(R.id.etCityName)).perform(typeText("Rome"))
+        onView(withId(R.id.btnShowSixteenDaysForcast)).perform(click())
+        onView(withText("Rome")).check(matches(isDisplayed()))
+    }
 
     @Test
     fun testHintVisibility() {
-        // enter name
+        onView(withId(R.id.etCityName)).check(matches(withHint("Enter City Name")))
         onView(withId(R.id.etCityName)).perform(typeText("Rome"), closeSoftKeyboard())
         onView(withId(R.id.etCityName)).check(matches(withText("Rome")))
     }
