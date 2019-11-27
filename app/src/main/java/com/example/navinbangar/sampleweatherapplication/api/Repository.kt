@@ -20,7 +20,7 @@ class Repository(private val webservice: WeatherServiceApiInterface) {
     ///Get current weather details
     fun getCurrentWeatherData(currentWeatherLiveData: MutableLiveData<WeatherCurrentDetail?>, cityName: String, countryName: String = "countryName"): MutableLiveData<WeatherCurrentDetail?> {
         val call = webservice.getCurrentWeatherData("$cityName,$countryName", ForecastAppId)
-        call.enqueue(object : Callback<WeatherCurrentDetail?> {
+        call?.enqueue(object : Callback<WeatherCurrentDetail?> {
             override fun onResponse(call: Call<WeatherCurrentDetail?>, response: Response<WeatherCurrentDetail?>) {
                 if (response.code() == success_code) {
                     val weatherForecastObj = response.body()
@@ -59,7 +59,7 @@ class Repository(private val webservice: WeatherServiceApiInterface) {
     //Get weather forecast for 16 days
     fun getSixteenDaysForecastData(sixteenDaysForeCastLiveData: MutableLiveData<WeatherForeCast?>, cityName: String, countryName: String = "countryName"): MutableLiveData<WeatherForeCast?> {
         val call = webservice.getSixteenDaysForecastData("$cityName,$countryName", ForecastAppId, mode, unit, cnt)
-        call.enqueue(object : Callback<WeatherForeCast?> {
+        call?.enqueue(object : Callback<WeatherForeCast?> {
             override fun onResponse(call: Call<WeatherForeCast?>, response: Response<WeatherForeCast?>) {
                 if (response.code() == success_code) {
                     val weatherForecastObj = response.body()
