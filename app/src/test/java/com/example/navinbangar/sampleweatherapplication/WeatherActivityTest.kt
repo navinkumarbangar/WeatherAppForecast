@@ -1,11 +1,15 @@
 package com.example.navinbangar.sampleweatherapplication
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.widget.Button
 import android.widget.EditText
 import com.example.navinbangar.sampleweatherapplication.R.id.*
 import com.example.navinbangar.sampleweatherapplication.api.Repository
+import com.example.navinbangar.sampleweatherapplication.model.WeatherCurrentDetail
+import com.example.navinbangar.sampleweatherapplication.model.WeatherForeCast
 import com.example.navinbangar.sampleweatherapplication.view.WeatherActivity
 import com.example.navinbangar.sampleweatherapplication.viewmodel.WeatherViewModel
 import org.junit.Assert
@@ -18,6 +22,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mockito.MockitoAnnotations
+import java.util.concurrent.CountDownLatch
 
 
 /**
@@ -36,11 +41,16 @@ class WeatherActivityTest {
     @Mock
     private val btnGetCurrentWeather: Button? = null
 
+    private lateinit var weatherForeCast: WeatherForeCast
+
+    private lateinit var currentWeatherForeCast: WeatherCurrentDetail
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         weatherActivity.viewModelFactory = createViewModelFactory(weatherViewModelTest)
+        weatherForeCast = mock(WeatherForeCast::class.java)
+        currentWeatherForeCast = mock(WeatherCurrentDetail::class.java)
     }
 
     @Test
@@ -55,20 +65,40 @@ class WeatherActivityTest {
     }
 
     @Test
+    fun isLiveDataEmittingWeatherForecastDetail() {
+        weatherViewModelTest.getCurrentWeatherLiveData().postValue(currentWeatherForeCast)
+        weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().postValue(weatherForeCast)
+
+        Assert.assertNotEquals(weatherViewModelTest.getCurrentWeatherLiveData().value, currentWeatherForeCast)
+        Assert.assertNotEquals(weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().value, weatherForeCast)
+
+    }
+
+    @Test
+    fun isLiveDataEmitting_getOrAwaitValue() {
+        weatherViewModelTest.getCurrentWeatherLiveData().postValue(currentWeatherForeCast)
+        weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().postValue(weatherForeCast)
+
+        Assert.assertNotEquals(weatherViewModelTest.getCurrentWeatherLiveData().getOrAwaitValue(), currentWeatherForeCast)
+        Assert.assertNotEquals(weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().getOrAwaitValue(), weatherForeCast)
+
+    }
+
+    @Test
     fun testweatherViewModelTestNotNull() {
         assertNotNull(viewModelFactoryTest)
     }
 
     @Test
     @Throws(Exception::class)
-    fun `testGetViewModelFactory$production_sources_for_module_app`() {
+    fun testGetViewModelFactory() {
         val result = weatherActivity.viewModelFactory
         Assert.assertNotEquals(createViewModelFactory(weatherViewModelTest), result)
     }
 
     @Test
     @Throws(Exception::class)
-    fun `testSetViewModelFactory$production_sources_for_module_app`() {
+    fun testSetViewModelFactory() {
         weatherActivity.viewModelFactory = createViewModelFactory(weatherViewModelTest)
         Assert.assertNotNull(createViewModelFactory(weatherViewModelTest))
     }
@@ -85,4 +115,19 @@ class WeatherActivityTest {
         }
     }
 
+
+    fun <T> LiveData<T>.getOrAwaitValue(): T {
+        var data: T? = null
+        val latch = CountDownLatch(1)
+        val observer = object : Observer<T> {
+            override fun onChanged(o: T?) {
+                data = o
+                latch.countDown()
+                this@getOrAwaitValue.removeObserver(this)
+            }
+        }
+        this.observeForever(observer)
+        @Suppress("UNCHECKED_CAST")
+        return data as T
+    }
 }
