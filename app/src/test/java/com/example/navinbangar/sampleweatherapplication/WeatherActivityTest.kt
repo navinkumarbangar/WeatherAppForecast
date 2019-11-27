@@ -1,7 +1,5 @@
 package com.example.navinbangar.sampleweatherapplication
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.widget.Button
@@ -23,7 +21,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mockito.MockitoAnnotations
-import java.util.concurrent.CountDownLatch
 
 
 /**
@@ -121,21 +118,5 @@ class WeatherActivityTest {
                 throw IllegalArgumentException("Unknown view model class $viewModelClass")
             }
         }
-    }
-
-
-    fun <T> LiveData<T>.getOrAwaitValue(): T {
-        var data: T? = null
-        val latch = CountDownLatch(1)
-        val observer = object : Observer<T> {
-            override fun onChanged(o: T?) {
-                data = o
-                latch.countDown()
-                this@getOrAwaitValue.removeObserver(this)
-            }
-        }
-        this.observeForever(observer)
-        @Suppress("UNCHECKED_CAST")
-        return data as T
     }
 }
