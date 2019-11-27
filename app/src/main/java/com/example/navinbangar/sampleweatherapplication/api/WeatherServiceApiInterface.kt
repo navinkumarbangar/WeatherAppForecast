@@ -15,12 +15,12 @@ import retrofit2.http.Query
 interface WeatherServiceApiInterface {
 
     @GET("data/2.5/weather?")
-    fun getCurrentWeatherData(@Query("q") q: String, @Query("APPID") APPID: String): Call<WeatherCurrentDetail?>
+    fun getCurrentWeatherData(@Query("q") q: String, @Query("APPID") APPID: String): Call<WeatherCurrentDetail?>?
 
     @GET("data/2.5/forecast/hourly?")
     fun getHourlyWeatherData(@Query("q") q: String, @Query("appid") appid: String): Call<WeatherDetailHourly>
 
     @GET("data/2.5/forecast?")
     fun getSixteenDaysForecastData(@Query("q") q: String, @Query("APPID") appid: String
-                                   , @Query("mode") mode: String, @Query("units") units: String, @Query("cnt") cnt: String): Call<WeatherForeCast?>
+                                   , @Query("mode") mode: String, @Query("units") units: String, @Query("cnt") cnt: String): Call<WeatherForeCast?>?
 }
