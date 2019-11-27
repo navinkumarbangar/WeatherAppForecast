@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.example.navinbangar.sampleweatherapplication.R.id.*
 import com.example.navinbangar.sampleweatherapplication.api.Repository
+import com.example.navinbangar.sampleweatherapplication.api.WeatherServiceApiInterface
 import com.example.navinbangar.sampleweatherapplication.model.WeatherCurrentDetail
 import com.example.navinbangar.sampleweatherapplication.model.WeatherForeCast
 import com.example.navinbangar.sampleweatherapplication.view.WeatherActivity
@@ -32,7 +33,8 @@ import java.util.concurrent.CountDownLatch
 @RunWith(JUnit4::class)
 class WeatherActivityTest {
     val weatherActivity = spy(WeatherActivity())
-    private val repository = mock(Repository::class.java)
+    private val weatherService = mock(WeatherServiceApiInterface::class.java)
+    private val repository = Repository(weatherService)
     private val viewModelFactoryTest = mock(ViewModelProvider.Factory::class.java)
 
     private var weatherViewModelTest = WeatherViewModel(repository)
@@ -75,13 +77,19 @@ class WeatherActivityTest {
     }
 
     @Test
-    fun isLiveDataEmitting_getOrAwaitValue() {
-        weatherViewModelTest.getCurrentWeatherLiveData().postValue(currentWeatherForeCast)
-        weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().postValue(weatherForeCast)
+    fun isLiveDataEmittingCorrectCurrentWeatherDetails() {
+        val currentDetail = repository.getCurrentWeatherData(weatherViewModelTest.getCurrentWeatherLiveData(), "Rome")
+        weatherViewModelTest.getCurrentWeatherLiveData().postValue(currentDetail.value)
 
-        Assert.assertNotEquals(weatherViewModelTest.getCurrentWeatherLiveData().getOrAwaitValue(), currentWeatherForeCast)
-        Assert.assertNotEquals(weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().getOrAwaitValue(), weatherForeCast)
+        Assert.assertEquals(weatherViewModelTest.getCurrentWeatherLiveData().value, currentDetail.value)
+    }
 
+    @Test
+    fun isLiveDataEmittingCorrectSixteenDaysForecastWeatherDetails() {
+        val sixteeDaysForeCastDetails = repository.getSixteenDaysForecastData(weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData(), "Rome")
+        weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().postValue(sixteeDaysForeCastDetails.value)
+
+        Assert.assertEquals(weatherViewModelTest.getSixteenDaysForeCastWeatherLiveData().value, sixteeDaysForeCastDetails.value)
     }
 
     @Test
